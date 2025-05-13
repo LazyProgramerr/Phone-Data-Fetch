@@ -1,6 +1,7 @@
 package com.sai.phonedatafetch.database
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import com.sai.phonedatafetch.MOBILE_BRAND
 import com.sai.phonedatafetch.MOBILE_NAME
 
@@ -22,10 +23,10 @@ class repository(context: Context) {
     suspend fun getMobiles(searchType:String,name: String,year:Int): List<PhoneModel>{
         when (searchType){
             MOBILE_BRAND ->{
-                return phoneDao.getMobilesByBrand(name,year)
+                return phoneDao.getMobilesByBrand(name)
             }
             MOBILE_NAME ->{
-                return phoneDao.getMobilesByName(name,year)
+                return phoneDao.getMobilesByName(name)
             }
         }
         return emptyList()
@@ -34,4 +35,12 @@ class repository(context: Context) {
     suspend fun getMobileBrands() : List<String>{
         return phoneDao.getMobileBrands()
     }
+    fun getMobileBrandsLD() : LiveData<List<String>>{
+        return phoneDao.getMobileBrandsLD()
+    }
+
+    suspend fun isBranded(text: String): Boolean {
+        return phoneDao.idBrand(text.lowercase()).isNotEmpty()
+    }
+
 }
